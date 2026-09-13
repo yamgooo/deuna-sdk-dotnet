@@ -1,0 +1,4 @@
+{
+  "statusCode": 400,
+  "message": "Refund was already processed for this transferNumber 018928363049. Please verify the transferNumber and try again"
+}

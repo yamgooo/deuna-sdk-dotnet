@@ -1,0 +1,1265 @@
+{
+  "info": {
+    "_postman_id": "9af1304f-4e51-407b-8d4a-058ee21a9eff",
+    "name": "API PAGOS MERCHANT - DOC PROD",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "45666514",
+    "_collection_link": "https://go.postman.co/collection/45666514-9af1304f-4e51-407b-8d4a-058ee21a9eff?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Request Payment",
+      "request": {
+        "auth": {
+          "type": "apikey",
+          "apikey": [
+            {
+              "key": "value",
+              "value": "{{x-api-key}}",
+              "type": "string"
+            },
+            {
+              "key": "key",
+              "value": "x-api-key",
+              "type": "string"
+            },
+            {
+              "key": "in",
+              "value": "header",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "x-api-secret",
+            "value": "{{x-api-secret}}",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"pointOfSale\": \"{{point-of-sale}}\",\n  \"qrType\": \"dynamic\",\n  \"amount\": 0.1,\n  \"detail\": \"test postman GEO\",\n  \"internalTransactionReference\": \"Prueba pago App\",\n  \"format\": \"5\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{url_app}}/merchant/v1/payment/request",
+          "host": [
+            "{{url_app}}"
+          ],
+          "path": [
+            "merchant",
+            "v1",
+            "payment",
+            "request"
+          ]
+        },
+        "description": "### Campos del Body\n\n- `pointOfSale` (string, obligatorio): Identificador del punto de venta.\n    \n- `qrType` (string, obligatorio): Tipo de QR (ej. dynamic).\n    \n- `amount` (decimal, obligatorio): Monto de la transacción.\n    \n- `detail` (string, opcional): Detalle de la transacción.\n    \n- `internalTransactionReference` (string, obligatorio): Referencia interna de la transacción.\n    \n- `format` (string, obligatorio): Formato de la solicitud (ej. 1)."
+      },
+      "response": [
+        {
+          "name": "Response format 0",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "x-api-secret",
+                "value": "{{apiSecretHardRock}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"pointOfSale\": \"462\",\n  \"qrType\": \"dynamic\",\n  \"amount\": 30,\n  \"detail\": \"test postman Andre\",\n  \"internalTransactionReference\": \"Prueba pago App\",\n  \"format\": \"0\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://deuna-dev.apigee.net/merchant/api/v1/payment/request",
+              "protocol": "https",
+              "host": [
+                "deuna-dev",
+                "apigee",
+                "net"
+              ],
+              "path": [
+                "merchant",
+                "api",
+                "v1",
+                "payment",
+                "request"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Date",
+              "value": "Fri, 05 Jul 2024 18:45:30 GMT"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Server",
+              "value": "envoy"
+            },
+            {
+              "key": "apigw-requestid",
+              "value": "ac7Tgi_CIAMEcDQ="
+            },
+            {
+              "key": "x-powered-by",
+              "value": "Express"
+            },
+            {
+              "key": "etag",
+              "value": "W/\"88-RJ2jMiC4c2wM8krUuHpJawB+G34\""
+            },
+            {
+              "key": "x-envoy-upstream-service-time",
+              "value": "548"
+            },
+            {
+              "key": "X-Cache",
+              "value": "Miss from cloudfront"
+            },
+            {
+              "key": "Via",
+              "value": "1.1 6e5576b120c81986215d5e2dd5676fe8.cloudfront.net (CloudFront)"
+            },
+            {
+              "key": "X-Amz-Cf-Pop",
+              "value": "ATL56-C3"
+            },
+            {
+              "key": "X-Amz-Cf-Id",
+              "value": "JtCrlD76WUSmZHJmExQnQWMG5veDNr4bgZc5Txq2rCAtdAAP_R1L5w=="
+            },
+            {
+              "key": "X-XSS-Protection",
+              "value": "1; mode=block"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "DENY"
+            },
+            {
+              "key": "Referrer-Policy",
+              "value": "strict-origin-when-cross-origin"
+            },
+            {
+              "key": "Content-Security-Policy",
+              "value": "frame-ancestors 'none'; default-src 'self' *.auth0.com fonts.gstatic.com *.s3.us-east-1.amazonaws.com; img-src 'self'; script-src 'self' 'unsafe-inline' cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' fonts.googleapis.com; object-src 'none'"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "Strict-Transport-Security",
+              "value": "max-age=31536000; includeSubDomains; preload"
+            },
+            {
+              "key": "Content-Length",
+              "value": "136"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"status\": \"1\",\n    \"transactionId\": \"e91c7a59-b67d-40fe-b84b-2a29b055b543\",\n    \"deeplink\": \"https://pagar.deuna.app/H92p/merchant?id=C9T69PE1B6YN\"\n}"
+        },
+        {
+          "name": "Response format 1",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "x-api-secret",
+                "value": "{{apiSecretHardRock}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"pointOfSale\": \"462\",\n  \"qrType\": \"dynamic\",\n  \"amount\": 30,\n  \"detail\": \"test postman Andre\",\n  \"internalTransactionReference\": \"Prueba pago App\",\n  \"format\": \"1\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://deuna-dev.apigee.net/merchant/api/v1/payment/request",
+              "protocol": "https",
+              "host": [
+                "deuna-dev",
+                "apigee",
+                "net"
+              ],
+              "path": [
+                "merchant",
+                "api",
+                "v1",
+                "payment",
+                "request"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Date",
+              "value": "Fri, 05 Jul 2024 18:46:00 GMT"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Server",
+              "value": "envoy"
+            },
+            {
+              "key": "apigw-requestid",
+              "value": "ac7YLjJtoAMEVVA="
+            },
+            {
+              "key": "x-powered-by",
+              "value": "Express"
+            },
+            {
+              "key": "etag",
+              "value": "W/\"8f7-JRkNB/U+z/RamrxwbPy3+z6uPD8\""
+            },
+            {
+              "key": "x-envoy-upstream-service-time",
+              "value": "600"
+            },
+            {
+              "key": "X-Cache",
+              "value": "Miss from cloudfront"
+            },
+            {
+              "key": "Via",
+              "value": "1.1 6e5576b120c81986215d5e2dd5676fe8.cloudfront.net (CloudFront)"
+            },
+            {
+              "key": "X-Amz-Cf-Pop",
+              "value": "ATL56-C3"
+            },
+            {
+              "key": "X-Amz-Cf-Id",
+              "value": "5Y3vL1wbUpUmFtokfNzKP8mO4UZ3nmiG6QazeKkxmYnrQGjYyuCxeA=="
+            },
+            {
+              "key": "X-XSS-Protection",
+              "value": "1; mode=block"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "DENY"
+            },
+            {
+              "key": "Referrer-Policy",
+              "value": "strict-origin-when-cross-origin"
+            },
+            {
+              "key": "Content-Security-Policy",
+              "value": "frame-ancestors 'none'; default-src 'self' *.auth0.com fonts.gstatic.com *.s3.us-east-1.amazonaws.com; img-src 'self'; script-src 'self' 'unsafe-inline' cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' fonts.googleapis.com; object-src 'none'"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "Strict-Transport-Security",
+              "value": "max-age=31536000; includeSubDomains; preload"
+            },
+            {
+              "key": "Content-Length",
+              "value": "2295"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"status\": \"1\",\n    \"transactionId\": \"a24dd457-cabd-4c47-b176-6cf453cdbfa3\",\n    \"qr\": \"data:image/png;base64,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\"\n}"
+        },
+        {
+          "name": "Response format 2",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "x-api-secret",
+                "value": "{{apiSecretHardRock}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"pointOfSale\": \"462\",\n  \"qrType\": \"dynamic\",\n  \"amount\": 30,\n  \"detail\": \"test postman Andre\",\n  \"internalTransactionReference\": \"Prueba pago App\",\n  \"format\": \"2\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://deuna-dev.apigee.net/merchant/api/v1/payment/request",
+              "protocol": "https",
+              "host": [
+                "deuna-dev",
+                "apigee",
+                "net"
+              ],
+              "path": [
+                "merchant",
+                "api",
+                "v1",
+                "payment",
+                "request"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Date",
+              "value": "Fri, 05 Jul 2024 18:44:35 GMT"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Server",
+              "value": "envoy"
+            },
+            {
+              "key": "apigw-requestid",
+              "value": "ac7KxhvJIAMEJdQ="
+            },
+            {
+              "key": "x-powered-by",
+              "value": "Express"
+            },
+            {
+              "key": "etag",
+              "value": "W/\"94e-p3h6/OwPB8zBesB593MZLmGYkFc\""
+            },
+            {
+              "key": "x-envoy-upstream-service-time",
+              "value": "1289"
+            },
+            {
+              "key": "X-Cache",
+              "value": "Miss from cloudfront"
+            },
+            {
+              "key": "Via",
+              "value": "1.1 6e5576b120c81986215d5e2dd5676fe8.cloudfront.net (CloudFront)"
+            },
+            {
+              "key": "X-Amz-Cf-Pop",
+              "value": "ATL56-C3"
+            },
+            {
+              "key": "X-Amz-Cf-Id",
+              "value": "SBxwfY-8EdVacQ9erRnX328kC4pfrneGqHDtPwSCtvNzxQOP5xp54Q=="
+            },
+            {
+              "key": "X-XSS-Protection",
+              "value": "1; mode=block"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "DENY"
+            },
+            {
+              "key": "Referrer-Policy",
+              "value": "strict-origin-when-cross-origin"
+            },
+            {
+              "key": "Content-Security-Policy",
+              "value": "frame-ancestors 'none'; default-src 'self' *.auth0.com fonts.gstatic.com *.s3.us-east-1.amazonaws.com; img-src 'self'; script-src 'self' 'unsafe-inline' cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' fonts.googleapis.com; object-src 'none'"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "Strict-Transport-Security",
+              "value": "max-age=31536000; includeSubDomains; preload"
+            },
+            {
+              "key": "Content-Length",
+              "value": "2382"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"status\": \"1\",\n    \"transactionId\": \"21f10448-0c6c-4b6b-9664-f23b897b58d1\",\n    \"qr\": \"data:image/png;base64,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\",\n    \"deeplink\": \"https://pagar.deuna.app/H92p/merchant?id=FMLZYLZDA749\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Info Payment",
+      "request": {
+        "auth": {
+          "type": "apikey",
+          "apikey": [
+            {
+              "key": "value",
+              "value": "{{x-api-key}}",
+              "type": "string"
+            },
+            {
+              "key": "key",
+              "value": "x-api-key",
+              "type": "string"
+            },
+            {
+              "key": "in",
+              "value": "header",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "x-api-secret",
+            "value": "{{x-api-secret}}",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"idTransacionReference\": \"11d80873-9202-4653-bf6a-b6907e7fb5b3\",\n  \"idType\": \"0\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{url_app}}/merchant/v1/payment/info",
+          "host": [
+            "{{url_app}}"
+          ],
+          "path": [
+            "merchant",
+            "v1",
+            "payment",
+            "info"
+          ]
+        },
+        "description": "### Campos del Body\n\n- `idTransacionReference` (string, obligatorio): Referencia única de la transacción.\n    \n    - **Tipo de dato**: `string`\n        \n    - **Obligatoriedad**: Obligatorio\n        \n    - **Ejemplo**: `\"21f10448-0c6c-4b6b-9664-f23b897b58d1\"`\n        \n- `idType` (string, obligatorio): Tipo de identificación.\n    \n    - **Tipo de dato**: `string`\n        \n    - **Obligatoriedad**: Obligatorio\n        \n    - **Ejemplo**: `\"0\"`"
+      },
+      "response": [
+        {
+          "name": "Response Pending",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "x-api-secret",
+                "value": "{{apiSecretHardRock}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"idTransacionReference\": \"{{transactionId}}\",\n  \"idType\": \"0\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://deuna-dev.apigee.net/merchant/api/v1/payment/info",
+              "protocol": "https",
+              "host": [
+                "deuna-dev",
+                "apigee",
+                "net"
+              ],
+              "path": [
+                "merchant",
+                "api",
+                "v1",
+                "payment",
+                "info"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Date",
+              "value": "Fri, 05 Jul 2024 18:46:25 GMT"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Server",
+              "value": "envoy"
+            },
+            {
+              "key": "apigw-requestid",
+              "value": "ac7cJho3IAMEc5g="
+            },
+            {
+              "key": "x-powered-by",
+              "value": "Express"
+            },
+            {
+              "key": "etag",
+              "value": "W/\"fd-ThDNJUroN1sd6h7klR1T2CXJzyo\""
+            },
+            {
+              "key": "x-envoy-upstream-service-time",
+              "value": "325"
+            },
+            {
+              "key": "X-Cache",
+              "value": "Miss from cloudfront"
+            },
+            {
+              "key": "Via",
+              "value": "1.1 daffabb457891712cb3e53dfa8708c94.cloudfront.net (CloudFront)"
+            },
+            {
+              "key": "X-Amz-Cf-Pop",
+              "value": "ATL56-C3"
+            },
+            {
+              "key": "X-Amz-Cf-Id",
+              "value": "RQConZrK1DaVppF4Ja9-9lCrNE3CDxJqKTk0KRXpeQdtuxTyX1XDJw=="
+            },
+            {
+              "key": "X-XSS-Protection",
+              "value": "1; mode=block"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "DENY"
+            },
+            {
+              "key": "Referrer-Policy",
+              "value": "strict-origin-when-cross-origin"
+            },
+            {
+              "key": "Content-Security-Policy",
+              "value": "frame-ancestors 'none'; default-src 'self' *.auth0.com fonts.gstatic.com *.s3.us-east-1.amazonaws.com; img-src 'self'; script-src 'self' 'unsafe-inline' cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' fonts.googleapis.com; object-src 'none'"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "Strict-Transport-Security",
+              "value": "max-age=31536000; includeSubDomains; preload"
+            },
+            {
+              "key": "Content-Length",
+              "value": "253"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"status\": \"PENDING\",\n    \"internalTransactionReference\": \"\",\n    \"amount\": 0,\n    \"transactionId\": \"a24dd457-cabd-4c47-b176-6cf453cdbfa3\",\n    \"transferNumber\": \"\",\n    \"date\": \"\",\n    \"branchId\": \"\",\n    \"posId\": \"\",\n    \"currency\": \"USD\",\n    \"description\": \"\",\n    \"ordererName\": \"\",\n    \"ordererIdentification\": \"\"\n}"
+        },
+        {
+          "name": "Response Approved",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "x-api-secret",
+                "value": "{{apiSecretHardRock}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"idTransacionReference\": \"21f10448-0c6c-4b6b-9664-f23b897b58d1\",\n  \"idType\": \"0\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://deuna-dev.apigee.net/merchant/api/v1/payment/info",
+              "protocol": "https",
+              "host": [
+                "deuna-dev",
+                "apigee",
+                "net"
+              ],
+              "path": [
+                "merchant",
+                "api",
+                "v1",
+                "payment",
+                "info"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Date",
+              "value": "Fri, 05 Jul 2024 18:48:37 GMT"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Server",
+              "value": "envoy"
+            },
+            {
+              "key": "apigw-requestid",
+              "value": "ac7w1hjEIAMEaSw="
+            },
+            {
+              "key": "x-powered-by",
+              "value": "Express"
+            },
+            {
+              "key": "etag",
+              "value": "W/\"171-CZwdetwuG72H1mPz0PcEAOMo9YM\""
+            },
+            {
+              "key": "x-envoy-upstream-service-time",
+              "value": "372"
+            },
+            {
+              "key": "X-Cache",
+              "value": "Miss from cloudfront"
+            },
+            {
+              "key": "Via",
+              "value": "1.1 eec18dadf208b762f519cab1e8369c3c.cloudfront.net (CloudFront)"
+            },
+            {
+              "key": "X-Amz-Cf-Pop",
+              "value": "ATL56-C3"
+            },
+            {
+              "key": "X-Amz-Cf-Id",
+              "value": "MdF86X4VuSidRAHeav09NdzmiReIAkV7rg950EVCPkCGOgUni3E-3A=="
+            },
+            {
+              "key": "X-XSS-Protection",
+              "value": "1; mode=block"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "DENY"
+            },
+            {
+              "key": "Referrer-Policy",
+              "value": "strict-origin-when-cross-origin"
+            },
+            {
+              "key": "Content-Security-Policy",
+              "value": "frame-ancestors 'none'; default-src 'self' *.auth0.com fonts.gstatic.com *.s3.us-east-1.amazonaws.com; img-src 'self'; script-src 'self' 'unsafe-inline' cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' fonts.googleapis.com; object-src 'none'"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "Strict-Transport-Security",
+              "value": "max-age=31536000; includeSubDomains; preload"
+            },
+            {
+              "key": "Content-Length",
+              "value": "369"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"status\": \"APPROVED\",\n    \"internalTransactionReference\": \"Prueba pago App\",\n    \"amount\": 30,\n    \"transactionId\": \"21f10448-0c6c-4b6b-9664-f23b897b58d1\",\n    \"transferNumber\": \"972454362424\",\n    \"date\": \"7/5/2024, 1:47:29 PM\",\n    \"branchId\": \"461\",\n    \"posId\": \"462\",\n    \"currency\": \"USD\",\n    \"description\": \"test postman Andre\",\n    \"ordererName\": \"LEANDRO GABRIEL ALVAREZ SAMANIEGO\",\n    \"ordererIdentification\": \"0603358920\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Cancel Transaction",
+      "request": {
+        "auth": {
+          "type": "apikey",
+          "apikey": [
+            {
+              "key": "value",
+              "value": "{{x-api-key}}",
+              "type": "string"
+            },
+            {
+              "key": "key",
+              "value": "x-api-key",
+              "type": "string"
+            },
+            {
+              "key": "in",
+              "value": "header",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "x-api-secret",
+            "value": "{{x-api-secret}}"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"transactionId\": \"11d80873-9202-4653-bf6a-b6907e7fb5b3\",\r\n    \"pointOfSale\": \"{{point-of-sale}}\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{url_app}}/merchant/v1/payment/cancel",
+          "host": [
+            "{{url_app}}"
+          ],
+          "path": [
+            "merchant",
+            "v1",
+            "payment",
+            "cancel"
+          ]
+        },
+        "description": "### Campos del Body\n\n- `transactionId` (string, obligatorio): Identificador único de la transacción.\n    \n    - **Tipo de dato**: `string`\n        \n    - **Obligatoriedad**: Obligatorio\n        \n    - **Ejemplo**: `\"ebc7f0eb-7dd4-4997-946c-edd613327add\"`\n        \n- `pointOfSale` (string, obligatorio): Identificador del punto de venta.\n    \n    - **Tipo de dato**: `string`\n        \n    - **Obligatoriedad**: Obligatorio\n        \n    - **Ejemplo**: `\"462\"`"
+      },
+      "response": [
+        {
+          "name": "Cancel Transaction",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "identification",
+                "value": "xxxx",
+                "type": "text"
+              },
+              {
+                "key": "x-api-secret",
+                "value": "xxxx",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"id\": \"250\",\r\n    \"transactionId\": \"ebc7f0eb-7dd4-4997-946c-edd613327add\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://deuna-test.apigee.net/merchant/api/v1/payment/cancel",
+              "protocol": "https",
+              "host": [
+                "deuna-test",
+                "apigee",
+                "net"
+              ],
+              "path": [
+                "merchant",
+                "api",
+                "v1",
+                "payment",
+                "cancel"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Date",
+              "value": "Tue, 29 Aug 2023 22:27:46 GMT"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "117"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Server",
+              "value": "envoy"
+            },
+            {
+              "key": "apigw-requestid",
+              "value": "KcaTbj68IAMEVMw="
+            },
+            {
+              "key": "x-powered-by",
+              "value": "Express"
+            },
+            {
+              "key": "etag",
+              "value": "W/\"75-swt3q4w0UW89ItzHpjvGfj1RQa8\""
+            },
+            {
+              "key": "x-envoy-upstream-service-time",
+              "value": "119"
+            },
+            {
+              "key": "X-Cache",
+              "value": "Miss from cloudfront"
+            },
+            {
+              "key": "Via",
+              "value": "1.1 82ce5bab746a28b327ef72a8c64aab5c.cloudfront.net (CloudFront)"
+            },
+            {
+              "key": "X-Amz-Cf-Pop",
+              "value": "ATL56-C4"
+            },
+            {
+              "key": "X-Amz-Cf-Id",
+              "value": "s0F2o19P-YxezQ-sg0caEidIzOSLNZ9D5mMmPTYzhISmuh2LG4fmlA=="
+            },
+            {
+              "key": "X-XSS-Protection",
+              "value": "1; mode=block"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "DENY"
+            },
+            {
+              "key": "Referrer-Policy",
+              "value": "strict-origin-when-cross-origin"
+            },
+            {
+              "key": "Content-Security-Policy",
+              "value": "frame-ancestors 'none'; default-src 'self' *.auth0.com fonts.gstatic.com *.s3.us-east-1.amazonaws.com; img-src 'self'; script-src 'self' 'unsafe-inline' cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' fonts.googleapis.com; object-src 'none'"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "Strict-Transport-Security",
+              "value": "max-age=31536000; includeSubDomains; preload"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"transactionId\": \"ebc7f0eb-7dd4-4997-946c-edd613327add\",\n    \"message\": \"The QR with id 250 has been successfully cleaned\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Devolución de transacción",
+      "request": {
+        "auth": {
+          "type": "apikey",
+          "apikey": [
+            {
+              "key": "value",
+              "value": "{{x-api-key}}",
+              "type": "string"
+            },
+            {
+              "key": "key",
+              "value": "x-api-key",
+              "type": "string"
+            },
+            {
+              "key": "in",
+              "value": "header",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "x-api-secret",
+            "value": "{{x-api-secret}}",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"transferNumber\": \"985552344036\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{url_app}}/merchant/v1/payment/void",
+          "host": [
+            "{{url_app}}"
+          ],
+          "path": [
+            "merchant",
+            "v1",
+            "payment",
+            "void"
+          ]
+        },
+        "description": "### Campos del Body\n\n- `transferNumber` (string, obligatorio): Número de transferencia.\n    \n    - **Tipo de dato**: `string`\n        \n    - **Obligatoriedad**: Obligatorio\n        \n    - **Ejemplo**: `\"972454362424\"`"
+      },
+      "response": [
+        {
+          "name": "Response Ok",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "identification",
+                "value": "xxxx",
+                "type": "text"
+              },
+              {
+                "key": "x-api-secret",
+                "value": "xxxx",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n\"transferNumber\": \"018928363049\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://deuna-test.apigee.net/merchant/api/v1/payment/void",
+              "protocol": "https",
+              "host": [
+                "deuna-test",
+                "apigee",
+                "net"
+              ],
+              "path": [
+                "merchant",
+                "api",
+                "v1",
+                "payment",
+                "void"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Date",
+              "value": "Tue, 27 Feb 2024 20:15:55 GMT"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "150"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Server",
+              "value": "envoy"
+            },
+            {
+              "key": "apigw-requestid",
+              "value": "Tz9nOiw1IAMEMpQ="
+            },
+            {
+              "key": "x-powered-by",
+              "value": "Express"
+            },
+            {
+              "key": "etag",
+              "value": "W/\"96-6gikXu6t5SW/otdeKfoFeL1KTqA\""
+            },
+            {
+              "key": "x-envoy-upstream-service-time",
+              "value": "761"
+            },
+            {
+              "key": "X-Cache",
+              "value": "Miss from cloudfront"
+            },
+            {
+              "key": "Via",
+              "value": "1.1 933ff1cca50cf69615381c805530ec5e.cloudfront.net (CloudFront)"
+            },
+            {
+              "key": "X-Amz-Cf-Pop",
+              "value": "ATL59-P8"
+            },
+            {
+              "key": "X-Amz-Cf-Id",
+              "value": "kA8IJUxtTde4BoBx6OSJ95l-hlFdQpoWG35ZR0uSQiUqWmrmjcC-xw=="
+            },
+            {
+              "key": "X-XSS-Protection",
+              "value": "1; mode=block"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "DENY"
+            },
+            {
+              "key": "Referrer-Policy",
+              "value": "strict-origin-when-cross-origin"
+            },
+            {
+              "key": "Content-Security-Policy",
+              "value": "frame-ancestors 'none'; default-src 'self' *.auth0.com fonts.gstatic.com *.s3.us-east-1.amazonaws.com; img-src 'self'; script-src 'self' 'unsafe-inline' cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' fonts.googleapis.com; object-src 'none'"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "Strict-Transport-Security",
+              "value": "max-age=31536000; includeSubDomains; preload"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"status\": true,\n    \"message\": \"Refund executed successfully for transferNumber 018928363049\",\n    \"transactionReverseId\": \"cbecab24-0f18-45b2-986f-e6c9bcd68728\"\n}"
+        },
+        {
+          "name": "Response refund",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "identification",
+                "value": "xxxx",
+                "type": "text"
+              },
+              {
+                "key": "x-api-secret",
+                "value": "xxxx",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n\"transferNumber\": \"018928363049\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://deuna-test.apigee.net/merchant/api/v1/payment/void",
+              "protocol": "https",
+              "host": [
+                "deuna-test",
+                "apigee",
+                "net"
+              ],
+              "path": [
+                "merchant",
+                "api",
+                "v1",
+                "payment",
+                "void"
+              ]
+            }
+          },
+          "status": "Bad Request",
+          "code": 400,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Date",
+              "value": "Tue, 27 Feb 2024 20:16:05 GMT"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "144"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Server",
+              "value": "envoy"
+            },
+            {
+              "key": "apigw-requestid",
+              "value": "Tz9o4ivXIAMEYnw="
+            },
+            {
+              "key": "x-powered-by",
+              "value": "Express"
+            },
+            {
+              "key": "etag",
+              "value": "W/\"90-aFz6Tpc3BLr3jlTsSmqUi7NOEvk\""
+            },
+            {
+              "key": "x-envoy-upstream-service-time",
+              "value": "168"
+            },
+            {
+              "key": "X-Cache",
+              "value": "Error from cloudfront"
+            },
+            {
+              "key": "Via",
+              "value": "1.1 933ff1cca50cf69615381c805530ec5e.cloudfront.net (CloudFront)"
+            },
+            {
+              "key": "X-Amz-Cf-Pop",
+              "value": "ATL59-P8"
+            },
+            {
+              "key": "X-Amz-Cf-Id",
+              "value": "eb3pj4-Vvy5gIELWjh8ZCHmNDVc15kTxMR8VQAuQD5xAxDMJnRyaPA=="
+            },
+            {
+              "key": "X-XSS-Protection",
+              "value": "1; mode=block"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "DENY"
+            },
+            {
+              "key": "Referrer-Policy",
+              "value": "strict-origin-when-cross-origin"
+            },
+            {
+              "key": "Content-Security-Policy",
+              "value": "frame-ancestors 'none'; default-src 'self' *.auth0.com fonts.gstatic.com *.s3.us-east-1.amazonaws.com; img-src 'self'; script-src 'self' 'unsafe-inline' cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' fonts.googleapis.com; object-src 'none'"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "Strict-Transport-Security",
+              "value": "max-age=31536000; includeSubDomains; preload"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"statusCode\": 400,\n    \"message\": \"Refund was already processed for this transferNumber 018928363049. Please verify the transferNumber and try again\"\n}"
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "url_app",
+      "value": "https://apis-merchant.pdn.deunalab.com",
+      "type": "string"
+    },
+    {
+      "key": "x-api-key",
+      "value": "edf1a400abe84a448283a305b9f10eb4",
+      "type": "string"
+    },
+    {
+      "key": "x-api-secret",
+      "value": "9cd91b2f9a9e4a2c99c5f9641e08601a",
+      "type": "string"
+    },
+    {
+      "key": "point-of-sale",
+      "value": "161",
+      "type": "string"
+    }
+  ]
+}

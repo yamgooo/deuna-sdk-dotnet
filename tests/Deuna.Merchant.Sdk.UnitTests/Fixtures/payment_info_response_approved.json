@@ -1,0 +1,14 @@
+{
+  "status": "APPROVED",
+  "internalTransactionReference": "Prueba pago App",
+  "amount": 30,
+  "transactionId": "21f10448-0c6c-4b6b-9664-f23b897b58d1",
+  "transferNumber": "972454362424",
+  "date": "7/5/2024, 1:47:29 PM",
+  "branchId": "461",
+  "posId": "462",
+  "currency": "USD",
+  "description": "test postman Andre",
+  "ordererName": "LEANDRO GABRIEL ALVAREZ SAMANIEGO",
+  "ordererIdentification": "0603358920"
+}

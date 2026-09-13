@@ -1,0 +1,37 @@
+# Binaries & build output
+bin/
+obj/
+*.user
+*.suo
+.vs/
+_ReSharper*/
+*.DotSettings.user
+
+# NuGet
+*.nupkg
+*.snupkg
+nupkgs/
+.nuget/
+
+# Test results & coverage
+coverage/
+TestResults/
+*.trx
+*.coveragexml
+
+# OS cruft
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Rider
+.idea/
+
+# VS Code
+.vscode/
+!.vscode/extensions.json
+
+# dotnet secrets
+secrets.json
+appsettings.*.json
+!appsettings.json

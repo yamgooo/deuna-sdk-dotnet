@@ -1,0 +1,40 @@
+root = true
+
+[*]
+charset = utf-8
+end_of_line = crlf
+indent_style = space
+indent_size = 4
+trim_trailing_whitespace = true
+insert_final_newline = true
+
+[*.cs]
+# Require file-scoped namespaces
+csharp_style_namespace_declarations = file_scoped:error
+
+# Require var where obvious
+csharp_style_var_for_built_in_types = false:suggestion
+csharp_style_var_when_type_is_apparent = true:suggestion
+
+# Braces
+csharp_prefer_braces = true:warning
+
+# Expression body
+csharp_style_expression_bodied_methods = when_on_single_line:suggestion
+csharp_style_expression_bodied_properties = true:suggestion
+
+# Prefer primary constructor where available
+csharp_style_prefer_primary_constructors = true:suggestion
+
+# Null checks
+csharp_style_prefer_null_check_over_type_check = true:warning
+
+# Organise usings
+dotnet_sort_system_directives_first = true
+dotnet_separate_import_directive_groups = false
+
+[*.{json,yml,yaml}]
+indent_size = 2
+
+[*.md]
+trim_trailing_whitespace = false

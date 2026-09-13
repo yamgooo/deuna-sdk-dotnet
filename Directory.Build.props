@@ -1,0 +1,16 @@
+<Project>
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Authors>Erik Portilla Pesantez</Authors>
+    <Company>DEUNA</Company>
+    <Copyright>Copyright © 2026 Erik Portilla Pesantez</Copyright>
+    <RepositoryUrl>https://github.com/erikportilla/deuna-sdk-dotnet</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <!-- Enforce consistent code quality across all projects -->
+    <AnalysisLevel>latest</AnalysisLevel>
+  </PropertyGroup>
+</Project>
