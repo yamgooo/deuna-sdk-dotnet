@@ -3,10 +3,10 @@ using System.Net;
 namespace Deuna.Merchant.Sdk.Exceptions;
 
 /// <summary>
-/// Thrown when the DEUNA API returns a non-success HTTP status code.
-/// Carries the raw HTTP status code and the error payload from the server.
+/// Thrown when the DEUNA Merchant API returns a non-success HTTP status code.
+/// Contains the status code and the raw response body for debugging.
 /// </summary>
-public sealed class DeunaApiException : DeunaException
+public class DeunaApiException : DeunaException
 {
     /// <summary>The HTTP status code returned by the API.</summary>
     public HttpStatusCode StatusCode { get; }

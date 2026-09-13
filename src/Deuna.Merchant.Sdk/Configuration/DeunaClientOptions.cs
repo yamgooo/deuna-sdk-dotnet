@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using Deuna.Merchant.Sdk.Models.Enums;
 
 namespace Deuna.Merchant.Sdk.Configuration;
 
@@ -15,17 +16,18 @@ public sealed class DeunaClientOptions
     public const string SectionName = "DeunaClient";
 
     /// <summary>
-    /// The base URL of the DEUNA Merchant API.
-    /// <para>
-    /// Production: <c>https://apis-merchant.pdn.deunalab.com</c><br/>
-    /// Development: <c>https://deuna-dev.apigee.net</c><br/>
-    /// Test/Staging: <c>https://deuna-test.apigee.net</c>
-    /// </para>
-    /// Required. Must be a valid absolute URI.
+    /// The target environment (QA or Production).
+    /// Defaults to <see cref="DeunaEnvironment.Production"/>.
     /// </summary>
-    [Required]
+    public DeunaEnvironment Environment { get; set; } = DeunaEnvironment.Production;
+
+    /// <summary>
+    /// The base URL of the DEUNA Merchant API.
+    /// If left null or empty, it will be automatically populated based on the <see cref="Environment"/>.
+    /// Set this explicitly if you need to override the environment (e.g., for a custom sandbox).
+    /// </summary>
     [Url]
-    public string BaseUrl { get; set; } = "https://apis-merchant.pdn.deunalab.com";
+    public string? BaseUrl { get; set; }
 
     /// <summary>
     /// Your DEUNA API key. Sent as the <c>x-api-key</c> request header.

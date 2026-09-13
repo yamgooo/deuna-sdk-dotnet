@@ -31,11 +31,16 @@ public sealed class PaymentResponse
     public string? Deeplink { get; init; }
 
     /// <summary>
-    /// Base-64 encoded PNG image as a data URI (<c>data:image/png;base64,…</c>)
-    /// representing the QR code.
-    /// Present when <c>format</c> is <see cref="Enums.QrResponseFormat.QrOnly"/>
-    /// or <see cref="Enums.QrResponseFormat.QrAndDeeplink"/>.
+    /// Base64-encoded PNG image data URI of the generated QR code.
+    /// Included if requested in <see cref="Requests.PaymentRequest.Format"/>.
     /// </summary>
     [JsonPropertyName("qr")]
     public string? Qr { get; init; }
+
+    /// <summary>
+    /// A 6-digit numeric or alphanumeric code.
+    /// Included if <see cref="Requests.PaymentRequest.Format"/> is 3 or 4.
+    /// </summary>
+    [JsonPropertyName("numericCode")]
+    public string? NumericCode { get; init; }
 }

@@ -20,7 +20,7 @@ using Microsoft.Extensions.Logging;
 //   DEUNA_POS_ID      (required — your point-of-sale identifier)
 // ---------------------------------------------------------------------------
 
-var baseUrl = Environment.GetEnvironmentVariable("DEUNA_BASE_URL") ?? "https://apis-merchant.pdn.deunalab.com";
+var environment = Environment.GetEnvironmentVariable("DEUNA_ENVIRONMENT") ?? "Production";
 var apiKey = Environment.GetEnvironmentVariable("DEUNA_API_KEY") ?? string.Empty;
 var apiSecret = Environment.GetEnvironmentVariable("DEUNA_API_SECRET") ?? string.Empty;
 var pointOfSale = Environment.GetEnvironmentVariable("DEUNA_POS_ID") ?? string.Empty;
@@ -40,7 +40,7 @@ services.AddLogging(logging =>
 
 services.AddDeunaMerchantClient(opts =>
 {
-    opts.BaseUrl = baseUrl;
+    opts.Environment = Enum.TryParse<DeunaEnvironment>(environment, true, out var env) ? env : DeunaEnvironment.Production;
     opts.ApiKey = apiKey;
     opts.ApiSecret = apiSecret;
 });
@@ -60,7 +60,9 @@ try
         QrType = QrType.Dynamic,
         Amount = 0.10m,
         Detail = "SDK sample end-to-end demo",
-        InternalTransactionReference = $"sample-{Guid.NewGuid():N}",
+        // DEUNA enforces a strict < 20 characters limit on InternalTransactionReference. 
+        // We use a timestamp + random 4-char suffix to stay under 19 characters while remaining relatively unique for this demo.
+        InternalTransactionReference = $"{DateTime.UtcNow:yyMMddHHmmss}-{Guid.NewGuid().ToString("N")[..4]}",
         Format = QrResponseFormat.DeeplinkOnly,
     });
 
@@ -86,7 +88,7 @@ try
     var info = await deuna.Payments.GetInfoAsync(new PaymentInfoRequest
     {
         IdTransactionReference = paymentResponse.TransactionId,
-        IdType = "0",
+        IdType = IdType.TransactionId,
     });
 
     Console.WriteLine($"  ✔ Status   : {info.Status}");

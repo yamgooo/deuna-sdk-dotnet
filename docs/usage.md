@@ -38,7 +38,7 @@ Targets **.NET 10** and is compatible with AOT/trimmed deployments.
 ```json
 {
   "DeunaClient": {
-    "BaseUrl": "https://apis-merchant.pdn.deunalab.com",
+    "Environment": "Production",
     "ApiKey": "YOUR_API_KEY",
     "ApiSecret": "YOUR_API_SECRET",
     "Timeout": "00:00:30",
@@ -55,7 +55,8 @@ Targets **.NET 10** and is compatible with AOT/trimmed deployments.
 
 | Property | Type | Default | Description |
 |---|---|---|---|
-| `BaseUrl` | `string` | `https://apis-merchant.pdn.deunalab.com` | Production or sandbox URL |
+| `Environment` | `DeunaEnvironment` | `Production` | Target `Production` or `Qa` environments |
+| `BaseUrl` | `string` | _(auto-set)_ | API base URL — overrides `Environment` if explicitly set |
 | `ApiKey` | `string` | _(required)_ | `x-api-key` header value |
 | `ApiSecret` | `string` | _(required)_ | `x-api-secret` header value |
 | `Timeout` | `TimeSpan` | `00:00:30` | Per-request total timeout |
@@ -71,7 +72,7 @@ Targets **.NET 10** and is compatible with AOT/trimmed deployments.
 ```csharp
 builder.Services.AddDeunaMerchantClient(opts =>
 {
-    opts.BaseUrl   = "https://apis-merchant.pdn.deunalab.com";
+    opts.Environment = DeunaEnvironment.Production;
     opts.ApiKey    = Environment.GetEnvironmentVariable("DEUNA_API_KEY")!;
     opts.ApiSecret = Environment.GetEnvironmentVariable("DEUNA_API_SECRET")!;
 });
@@ -99,38 +100,43 @@ Creates a new payment and returns a QR code and/or deep-link.
 var response = await deuna.Payments.RequestAsync(new PaymentRequest
 {
     PointOfSale = "462",                             // Required: your POS ID
-    QrType = QrType.Dynamic,                         // "dynamic" — only supported type
+    QrType = QrType.Dynamic,                         // Required: QrType.Dynamic or QrType.Static
+    ExpiredTime = 60,                                // Optional: minutes until expiration (Dynamic only)
     Amount = 29.99m,                                 // Must be > 0
     Detail = "Invoice #1234",                        // Optional description
-    InternalTransactionReference = "order-9876",     // Your internal reference
-    Format = QrResponseFormat.QrAndDeeplink,         // "2" — returns both
+    InternalTransactionReference = "order-9876",     // Your internal reference (<= 20 chars)
+    Format = QrResponseFormat.QrAndDeeplink,         // Required: QrResponseFormat enum
 });
 
 Console.WriteLine(response.TransactionId); // GUID from DEUNA
-Console.WriteLine(response.Deeplink);      // nullable
-Console.WriteLine(response.Qr);           // nullable data URI (base64 PNG)
+Console.WriteLine(response.Deeplink);      // nullable string
+Console.WriteLine(response.Qr);            // nullable data URI (base64 PNG)
+Console.WriteLine(response.NumericCode);   // nullable 6-digit code (Format 3 or 4)
 ```
 
 **`QrResponseFormat` constants:**
 
 | Constant | Wire value | Response fields |
 |---|---|---|
-| `DeeplinkOnly` | `"0"` | `deeplink` |
-| `QrOnly` | `"1"` | `qr` |
-| `QrAndDeeplink` | `"2"` | `qr` + `deeplink` |
-| `Full` | `"5"` | All available fields |
+| `DeeplinkOnly` | `1` | `deeplink` |
+| `QrOnly` | `2` | `qr` |
+| `QrAndDeeplink` | `3` | `qr` + `deeplink` |
+| `Full` | `4` | `qr` + `deeplink` + `numericCode` |
+| `NumericCodeOnly` | `5` | `numericCode` |
 
 ---
 
 ### GetInfoAsync
 
-Polls the status of a transaction. Poll until `status != "PENDING"`.
+Polls the status of a transaction.
+> ⚠️ **Rate Limit Warning:** This endpoint is rate-limited to **3 requests per minute (3 TPM)**.
+> Rely on Webhooks for primary status updates and only fall back to `GetInfoAsync` after a delay.
 
 ```csharp
 var info = await deuna.Payments.GetInfoAsync(new PaymentInfoRequest
 {
     IdTransactionReference = transactionId,
-    IdType = "0",
+    IdType = IdType.TransactionId, // IdType constants: TransactionId, InternalTransactionReference, TransferNumber
 });
 
 // Open string — check by value, not enum
@@ -212,8 +218,13 @@ All SDK methods throw subtypes of `DeunaException`:
 
 | Exception | When |
 |---|---|
-| `DeunaValidationException` | Guard-clause failure on a null or empty parameter |
-| `DeunaApiException` | API returned a non-2xx status; carries `StatusCode` and `RawResponse` |
+| `DeunaValidationException` | Guard-clause failure on a null, empty, or incorrectly constrained parameter |
+| `DeunaBadRequestException` | API returned HTTP 400 Bad Request |
+| `DeunaNotFoundException` | API returned HTTP 404 Not Found |
+| `DeunaConflictException` | API returned HTTP 409 Conflict |
+| `DeunaRateLimitException` | API returned HTTP 429 Too Many Requests |
+| `DeunaServerException` | API returned HTTP 5xx Server Error |
+| `DeunaApiException` | API returned an unmapped non-2xx status; carries `StatusCode` and `RawResponse` |
 | `DeunaException` | Unexpected transport or serialization error |
 
 ```csharp
@@ -236,6 +247,27 @@ catch (DeunaException ex)
     // Transport/serialization failure
     logger.LogCritical(ex, "Unexpected SDK error");
 }
+```
+
+
+## Webhooks
+
+DEUNA uses Webhooks to notify your backend when a payment is processed. Since webhooks do not use signatures, you should whitelist DEUNA's IPs or use a secret path segment (e.g. `/webhooks/deuna/your-secret-token`).
+
+```csharp
+app.MapPost("/webhooks/deuna", async (HttpRequest request) =>
+{
+    using var reader = new StreamReader(request.Body);
+    var payloadString = await reader.ReadToEndAsync();
+    
+    var payload = DeunaWebhookParser.Parse(payloadString);
+    if (payload.Status == "APPROVED")
+    {
+        // Process payment
+    }
+    
+    return Results.Ok();
+});
 ```
 
 ---

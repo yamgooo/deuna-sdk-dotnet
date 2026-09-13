@@ -77,7 +77,7 @@ public sealed class PaymentClientIntegrationTests : IDisposable
         {
             PointOfSale = "462",
             Amount = 30m,
-            InternalTransactionReference = "integration-test-001",
+            InternalTransactionReference = "integ-test-001",
             Format = QrResponseFormat.DeeplinkOnly,
         });
 
@@ -96,7 +96,7 @@ public sealed class PaymentClientIntegrationTests : IDisposable
         const string responseBody = """
             {
               "status": "APPROVED",
-              "internalTransactionReference": "integration-test-001",
+              "internalTransactionReference": "integ-test-001",
               "amount": 30,
               "transactionId": "21f10448-0c6c-4b6b-9664-f23b897b58d1",
               "transferNumber": "972454362424",

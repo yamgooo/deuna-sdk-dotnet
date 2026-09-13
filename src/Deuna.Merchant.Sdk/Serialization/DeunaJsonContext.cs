@@ -1,6 +1,7 @@
 using System.Text.Json.Serialization;
 using Deuna.Merchant.Sdk.Models.Requests;
 using Deuna.Merchant.Sdk.Models.Responses;
+using Deuna.Merchant.Sdk.Models.Webhooks;
 
 namespace Deuna.Merchant.Sdk.Serialization;
 
@@ -17,6 +18,7 @@ namespace Deuna.Merchant.Sdk.Serialization;
 [JsonSerializable(typeof(CancelTransactionResponse))]
 [JsonSerializable(typeof(RefundResponse))]
 [JsonSerializable(typeof(DeunaErrorResponse))]
+[JsonSerializable(typeof(DeunaPaymentWebhookPayload))]
 [JsonSourceGenerationOptions(
     PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase,
     WriteIndented = false,

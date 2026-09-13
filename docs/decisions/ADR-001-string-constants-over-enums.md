@@ -1,7 +1,7 @@
 # ADR-001 — String Constants Instead of Enums for Extensible API Values
 
 **Date:** 2026-09-12  
-**Status:** Accepted
+**Status:** Superseded by ADR-005
 
 ## Context
 

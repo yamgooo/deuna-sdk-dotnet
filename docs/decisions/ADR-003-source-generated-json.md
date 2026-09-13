@@ -5,14 +5,18 @@
 
 ## Context
 
-The SDK requires JSON serialization for all request/response types. Two paths:
-1. Reflection-based `System.Text.Json` (default; simpler).
-2. Source-generated `JsonSerializerContext` (AOT/trimming-safe; faster first call).
+The SDK must deserialize DEUNA's JSON responses, which contain specific API shapes (e.g. inconsistent string formats for `date`, various error response shapes).
+Historically, .NET libraries used reflection-based `Newtonsoft.Json` or `System.Text.Json`. 
+However, modern .NET deployments (like AWS Lambda or Azure Container Apps) increasingly use Native AOT, which forbids reflection. 
+
+We need a serialization approach that guarantees the SDK can be used in AOT-compiled services while accurately mapping DEUNA's wire formats.
 
 ## Decision
 
-Use **source-generated** `JsonSerializerContext` (`DeunaJsonContext`), registering all
-SDK types with `[JsonSerializable]`.
+Use **Source-Generated `System.Text.Json`** via `JsonSerializerContext`.
+
+All models (Requests, Responses, and Webhooks) are registered in a partial `DeunaJsonContext`. 
+The `PaymentClient` uses this context directly during `PostAsync` rather than relying on reflection.
 
 All serialization in `PaymentClient` is done via `JsonTypeInfo<T>` overloads
 (`ReadFromJsonAsync`, `PostAsJsonAsync`), ensuring no reflection is used in the hot path.

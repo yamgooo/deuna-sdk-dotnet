@@ -11,7 +11,7 @@ public sealed class PaymentInfoResponse
 {
     /// <summary>
     /// Current status of the transaction. Open string — do not switch exhaustively.
-    /// Known values from the API: <c>"PENDING"</c>, <c>"APPROVED"</c>.
+    /// Known values from the API: <c>"PENDING"</c>, <c>"APPROVED"</c>, <c>"REVERSED"</c>, <c>"REVERSED_FAILED"</c>.
     /// </summary>
     [JsonPropertyName("status")]
     public string Status { get; init; } = string.Empty;
@@ -81,7 +81,7 @@ public sealed class PaymentInfoResponse
     /// </returns>
     public DateTimeOffset? TryGetParsedDate()
     {
-        if (string.IsNullOrWhiteSpace(Date))
+        if (string.IsNullOrWhiteSpace(Date) || Date.Length > 23)
         {
             return null;
         }

@@ -24,7 +24,7 @@ dotnet add package Deuna.Merchant.Sdk
 // 1. Register (ASP.NET Core / Generic Host)
 builder.Services.AddDeunaMerchantClient(opts =>
 {
-    opts.BaseUrl   = "https://apis-merchant.pdn.deunalab.com"; // or sandbox URL
+    opts.Environment = DeunaEnvironment.Production; // or DeunaEnvironment.Qa
     opts.ApiKey    = Environment.GetEnvironmentVariable("DEUNA_API_KEY")!;
     opts.ApiSecret = Environment.GetEnvironmentVariable("DEUNA_API_SECRET")!;
 });
@@ -47,11 +47,11 @@ public class PaymentService(IDeunaMerchantClient deuna)
         Console.WriteLine($"Transaction: {payment.TransactionId}");
         Console.WriteLine($"Deeplink:    {payment.Deeplink}");
 
-        // Poll status
+        // Poll status (fallback) - rely on Webhooks primarily!
         var info = await deuna.Payments.GetInfoAsync(new PaymentInfoRequest
         {
             IdTransactionReference = payment.TransactionId,
-            IdType = "0",
+            IdType = IdType.TransactionId,
         });
         Console.WriteLine($"Status: {info.Status}"); // "PENDING" or "APPROVED"
 
@@ -86,7 +86,8 @@ public class PaymentService(IDeunaMerchantClient deuna)
 
 | Option | Default | Description |
 |---|---|---|
-| `BaseUrl` | Production URL | API base — swap for sandbox/dev |
+| `Environment` | `Production` | Target `Production` or `Qa` environments |
+| `BaseUrl` | (auto-set) | API base — overrides `Environment` if set explicitly |
 | `ApiKey` | _(required)_ | `x-api-key` header |
 | `ApiSecret` | _(required)_ | `x-api-secret` header |
 | `Timeout` | 30 s | Per-request total timeout |
@@ -97,7 +98,7 @@ public class PaymentService(IDeunaMerchantClient deuna)
 ```json
 {
   "DeunaClient": {
-    "BaseUrl": "https://apis-merchant.pdn.deunalab.com",
+    "Environment": "Production",
     "ApiKey":  "...",
     "ApiSecret": "..."
   }
@@ -114,6 +115,7 @@ builder.Services.AddDeunaMerchantClient(builder.Configuration);
 
 ```csharp
 catch (DeunaValidationException ex) { /* bad input */ }
+catch (DeunaRateLimitException ex)  { /* 429 Too Many Requests */ }
 catch (DeunaApiException ex)        { /* non-2xx API response — ex.StatusCode, ex.RawResponse */ }
 catch (DeunaException ex)           { /* transport or serialization error */ }
 ```

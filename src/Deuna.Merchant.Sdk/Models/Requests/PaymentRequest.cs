@@ -20,7 +20,16 @@ public sealed class PaymentRequest
     /// Required.
     /// </summary>
     [JsonPropertyName("qrType")]
-    public string QrType { get; init; } = Enums.QrType.Dynamic;
+    public Enums.QrType QrType { get; init; } = Enums.QrType.Dynamic;
+
+    /// <summary>
+    /// Expiration time in minutes for a dynamic QR code or link.
+    /// Min: 1. Max: 720 (12 hours). Defaults to 720 if omitted on the API side.
+    /// Must not be set if <see cref="QrType"/> is <see cref="Enums.QrType.Static"/>.
+    /// </summary>
+    [JsonPropertyName("expiredTime")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public int? ExpiredTime { get; init; }
 
     /// <summary>
     /// Transaction amount (decimal). Must be greater than zero.
@@ -45,9 +54,8 @@ public sealed class PaymentRequest
 
     /// <summary>
     /// Controls which fields appear in the response.
-    /// Use constants from <see cref="Enums.QrResponseFormat"/> or supply any string value
-    /// for undocumented formats. Required.
+    /// Required.
     /// </summary>
     [JsonPropertyName("format")]
-    public string Format { get; init; } = Enums.QrResponseFormat.QrAndDeeplink;
+    public Enums.QrResponseFormat Format { get; init; } = Enums.QrResponseFormat.QrAndDeeplink;
 }

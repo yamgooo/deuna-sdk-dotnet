@@ -63,7 +63,7 @@ public sealed class PaymentClientTests
         var sentBody = JsonDocument.Parse(handler.LastRequestBody!).RootElement;
         sentBody.GetProperty("pointOfSale").GetString().Should().Be("462");
         sentBody.GetProperty("amount").GetDecimal().Should().Be(30m);
-        sentBody.GetProperty("format").GetString().Should().Be("0");
+        sentBody.GetProperty("format").GetInt32().Should().Be(1);
     }
 
     [Fact]
@@ -260,7 +260,7 @@ public sealed class PaymentClientTests
             PointOfSale = pos,
             Amount = 10m,
             InternalTransactionReference = "ref",
-            Format = "0",
+            Format = QrResponseFormat.QrOnly,
         };
         var act = async () => await client.RequestAsync(request);
         await act.Should().ThrowAsync<DeunaValidationException>();
@@ -275,7 +275,7 @@ public sealed class PaymentClientTests
             PointOfSale = "462",
             Amount = 0m,
             InternalTransactionReference = "ref",
-            Format = "0",
+            Format = QrResponseFormat.QrOnly,
         };
         var act = async () => await client.RequestAsync(request);
         await act.Should().ThrowAsync<DeunaValidationException>();

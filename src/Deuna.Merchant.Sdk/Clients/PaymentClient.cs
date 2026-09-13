@@ -44,10 +44,18 @@ internal sealed class PaymentClient : IPaymentClient
     {
         Guard(request, nameof(request));
         GuardString(request.PointOfSale, nameof(request.PointOfSale));
-        GuardString(request.QrType, nameof(request.QrType));
         GuardPositive(request.Amount, nameof(request.Amount));
-        GuardString(request.InternalTransactionReference, nameof(request.InternalTransactionReference));
-        GuardString(request.Format, nameof(request.Format));
+        GuardStringMaxLength(request.InternalTransactionReference, 19, nameof(request.InternalTransactionReference));
+        if (request.Detail != null)
+        {
+            GuardStringMaxLength(request.Detail, 50, nameof(request.Detail));
+        }
+
+        if (request.QrType == Models.Enums.QrType.Static && request.ExpiredTime.HasValue)
+        {
+            throw new DeunaValidationException(
+                "ExpiredTime must not be set when QrType is Static.", nameof(request.ExpiredTime));
+        }
 
         _logger.LogInformation(
             "Requesting payment for POS={PointOfSale} Amount={Amount} Format={Format}",
@@ -61,14 +69,37 @@ internal sealed class PaymentClient : IPaymentClient
             cancellationToken).ConfigureAwait(false);
     }
 
+    /// <summary>
+    /// Gets the current status of a payment transaction.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// <b>Rate Limit Warning:</b> This endpoint is strictly rate-limited to <b>3 requests per minute (3 TPM)</b>.
+    /// Exceeding this limit will result in your IP being blacklisted.
+    /// Rely on webhooks for payment confirmations, and only fall back to this endpoint
+    /// after approximately 15 seconds if a webhook is not received.
+    /// </para>
+    /// </remarks>
     /// <inheritdoc/>
     public async Task<PaymentInfoResponse> GetInfoAsync(
         PaymentInfoRequest request,
         CancellationToken cancellationToken = default)
     {
         Guard(request, nameof(request));
-        GuardString(request.IdTransactionReference, nameof(request.IdTransactionReference));
         GuardString(request.IdType, nameof(request.IdType));
+
+        switch (request.IdType)
+        {
+            case IdType.TransactionId:
+                GuardStringExactLength(request.IdTransactionReference, 36, nameof(request.IdTransactionReference));
+                break;
+            case IdType.InternalTransactionReference:
+                GuardStringExactLength(request.IdTransactionReference, 10, nameof(request.IdTransactionReference));
+                break;
+            case IdType.TransferNumber:
+                GuardStringMaxLength(request.IdTransactionReference, 20, nameof(request.IdTransactionReference));
+                break;
+        }
 
         _logger.LogInformation(
             "Querying payment info for TransactionReference={TransactionReference} IdType={IdType}",
@@ -109,7 +140,7 @@ internal sealed class PaymentClient : IPaymentClient
         CancellationToken cancellationToken = default)
     {
         Guard(request, nameof(request));
-        GuardString(request.TransferNumber, nameof(request.TransferNumber));
+        GuardStringMaxLength(request.TransferNumber, 12, nameof(request.TransferNumber));
 
         _logger.LogInformation(
             "Initiating refund for TransferNumber={TransferNumber}",
@@ -199,16 +230,41 @@ internal sealed class PaymentClient : IPaymentClient
 
             // Try to parse the documented error shape first.
             var errorPayload = JsonSerializer.Deserialize(rawBody, DeunaJsonContext.Default.DeunaErrorResponse);
-            errorMessage = !string.IsNullOrWhiteSpace(errorPayload?.Message)
-                ? errorPayload.Message
-                : $"The DEUNA API returned HTTP {(int)response.StatusCode} for '{relativeUrl}'.";
+            errorMessage = errorPayload?.Message ?? string.Empty;
+
+            // 3. Fallback: Check if it's `{ "status": false, "message": "..." }` or similar undocumented shape.
+            if (string.IsNullOrEmpty(errorMessage))
+            {
+                try
+                {
+                    using var doc = JsonDocument.Parse(rawBody);
+                    if (doc.RootElement.TryGetProperty("message", out var msgProp) && msgProp.ValueKind == JsonValueKind.String)
+                    {
+                        errorMessage = msgProp.GetString()!;
+                    }
+                }
+                catch { }
+            }
+
+            if (string.IsNullOrEmpty(errorMessage))
+            {
+                errorMessage = $"The DEUNA API returned HTTP {(int)response.StatusCode} for '{relativeUrl}'.";
+            }
         }
         catch
         {
             errorMessage = $"The DEUNA API returned HTTP {(int)response.StatusCode} for '{relativeUrl}'.";
         }
 
-        throw new DeunaApiException(response.StatusCode, errorMessage, rawBody);
+        throw response.StatusCode switch
+        {
+            HttpStatusCode.BadRequest => new DeunaBadRequestException(errorMessage, rawBody),
+            HttpStatusCode.NotFound => new DeunaNotFoundException(errorMessage, rawBody),
+            HttpStatusCode.Conflict => new DeunaConflictException(errorMessage, rawBody),
+            HttpStatusCode.TooManyRequests => new DeunaRateLimitException(errorMessage, rawBody),
+            var code when (int)code >= 500 => new DeunaServerException(code, errorMessage, rawBody),
+            _ => new DeunaApiException(response.StatusCode, errorMessage, rawBody)
+        };
     }
 
     /// <summary>
@@ -252,6 +308,44 @@ internal sealed class PaymentClient : IPaymentClient
         try
         {
             Ardalis.GuardClauses.Guard.Against.NullOrWhiteSpace(value, paramName);
+        }
+        catch (ArgumentException ex)
+        {
+            throw new DeunaValidationException(ex.Message, paramName, ex);
+        }
+    }
+
+    /// <summary>
+    /// Validates that a string parameter does not exceed a maximum length.
+    /// </summary>
+    private static void GuardStringMaxLength(string? value, int maxLength, string paramName)
+    {
+        try
+        {
+            Ardalis.GuardClauses.Guard.Against.NullOrWhiteSpace(value, paramName);
+            if (value.Length > maxLength)
+            {
+                throw new ArgumentException($"Must be {maxLength} characters or less.", paramName);
+            }
+        }
+        catch (ArgumentException ex)
+        {
+            throw new DeunaValidationException(ex.Message, paramName, ex);
+        }
+    }
+
+    /// <summary>
+    /// Validates that a string parameter is exactly the specified length.
+    /// </summary>
+    private static void GuardStringExactLength(string? value, int exactLength, string paramName)
+    {
+        try
+        {
+            Ardalis.GuardClauses.Guard.Against.NullOrWhiteSpace(value, paramName);
+            if (value.Length != exactLength)
+            {
+                throw new ArgumentException($"Must be exactly {exactLength} characters.", paramName);
+            }
         }
         catch (ArgumentException ex)
         {

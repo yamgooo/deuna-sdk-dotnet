@@ -38,6 +38,15 @@ public static class ServiceCollectionExtensions
         services
             .AddOptions<DeunaClientOptions>()
             .Configure(configure)
+            .PostConfigure(opts =>
+            {
+                if (string.IsNullOrWhiteSpace(opts.BaseUrl))
+                {
+                    opts.BaseUrl = opts.Environment == Models.Enums.DeunaEnvironment.Qa
+                        ? "https://apim-qa-deuna.azure-api.net"
+                        : "https://apis-merchant.pdn.deunalab.com";
+                }
+            })
             .ValidateDataAnnotations()
             .ValidateOnStart();
 
@@ -51,7 +60,7 @@ public static class ServiceCollectionExtensions
             .AddHttpClient(PaymentClient.HttpClientName, (sp, client) =>
             {
                 var opts = sp.GetRequiredService<IOptions<DeunaClientOptions>>().Value;
-                client.BaseAddress = new Uri(opts.BaseUrl.TrimEnd('/') + "/");
+                client.BaseAddress = new Uri(opts.BaseUrl!.TrimEnd('/') + "/");
                 client.Timeout = opts.Timeout;
                 client.DefaultRequestHeaders.Accept.Add(
                     new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
@@ -103,6 +112,12 @@ public static class ServiceCollectionExtensions
             if (!string.IsNullOrWhiteSpace(baseUrl))
             {
                 opts.BaseUrl = baseUrl;
+            }
+
+            var env = section["Environment"];
+            if (!string.IsNullOrWhiteSpace(env) && Enum.TryParse<Models.Enums.DeunaEnvironment>(env, true, out var e))
+            {
+                opts.Environment = e;
             }
 
             var apiKey = section["ApiKey"];

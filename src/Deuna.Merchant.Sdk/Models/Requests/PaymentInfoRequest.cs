@@ -20,9 +20,9 @@ public sealed class PaymentInfoRequest
     public string IdTransactionReference { get; init; } = string.Empty;
 
     /// <summary>
-    /// Specifies the type of reference ID provided in <see cref="IdTransactionReference"/>.
-    /// Observed value: <c>"0"</c> (transactionId). Required.
+    /// Type of the identifier provided in <see cref="IdTransactionReference"/>.
+    /// Use constants from <see cref="IdType"/>.
     /// </summary>
     [JsonPropertyName("idType")]
-    public string IdType { get; init; } = "0";
+    public string IdType { get; init; } = Requests.IdType.TransactionId;
 }
