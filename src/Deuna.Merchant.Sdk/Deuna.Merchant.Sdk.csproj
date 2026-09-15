@@ -10,9 +10,11 @@
     <PackageVersion>1.0.0</PackageVersion>
     <Authors>Erik Portilla</Authors>
     <RepositoryUrl>https://github.com/yamgooo/deuna-sdk-dotnet</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/yamgooo/deuna-sdk-dotnet</PackageProjectUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <Description>Strongly-typed, async, DI-friendly .NET SDK for the DEUNA Merchant Payments API. Supports payment requests, payment info queries, cancellations, and refunds with built-in resilience and secure credential handling.</Description>
-    <PackageTags>deuna;payments;qr;merchant;sdk;dotnet</PackageTags>
+    <Description>Strongly-typed, async, DI-friendly .NET SDK for the DEUNA Merchant Payments API (Banco Pichincha / Ecuador). Supports payment requests, QR code and deeplink generation, payment info queries, cancellations, and refunds with built-in Polly resilience.</Description>
+    <PackageTags>deuna;ecuador;banco-pichincha;payments;payment-gateway;qr-code;deeplink;merchant;fintech;dotnet;csharp;resilience;polly</PackageTags>
+    <PackageReleaseNotes>https://github.com/yamgooo/deuna-sdk-dotnet/blob/main/CHANGELOG.md</PackageReleaseNotes>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
 
