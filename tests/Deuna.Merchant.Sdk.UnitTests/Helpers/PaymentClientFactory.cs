@@ -12,9 +12,10 @@ internal static class PaymentClientFactory
     public static (PaymentClient Client, MockHttpMessageHandler Handler) Create(
         System.Net.HttpStatusCode statusCode,
         string responseBody,
-        string baseUrl = "https://test.deuna.local/")
+        string baseUrl = "https://test.deuna.local/",
+        string contentType = "application/json")
     {
-        var handler = new MockHttpMessageHandler(statusCode, responseBody);
+        var handler = new MockHttpMessageHandler(statusCode, responseBody, contentType);
         var httpClient = new HttpClient(handler) { BaseAddress = new Uri(baseUrl) };
         var factory = new SingletonHttpClientFactory(PaymentClient.HttpClientName, httpClient);
         var logger = NullLogger<PaymentClient>.Instance;

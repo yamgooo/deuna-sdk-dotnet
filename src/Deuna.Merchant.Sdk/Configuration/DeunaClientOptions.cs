@@ -62,4 +62,18 @@ public sealed class DeunaClientOptions
     /// Defaults to 15 seconds.
     /// </summary>
     public TimeSpan MaxRetryDelay { get; set; } = TimeSpan.FromSeconds(15);
+
+    /// <summary>
+    /// Default User-Agent header value sent by the SDK, including assembly version and runtime version.
+    /// </summary>
+    public static readonly string DefaultUserAgent =
+        $"DeunaMerchantSdk/{typeof(DeunaClientOptions).Assembly.GetName().Version?.ToString(3) ?? "1.0.0"} (.NET/{System.Environment.Version.Major}.{System.Environment.Version.Minor})";
+
+    /// <summary>
+    /// The User-Agent header value to send with HTTP requests.
+    /// Defaults to <see cref="DefaultUserAgent"/>.
+    /// Required by the DEUNA API gateway to avoid being routed to the web portal.
+    /// </summary>
+    public string UserAgent { get; set; } = DefaultUserAgent;
 }
+

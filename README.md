@@ -1,6 +1,6 @@
 # Deuna.Merchant.Sdk
 
-[![Build](https://github.com/erikportilla/deuna-sdk-dotnet/actions/workflows/ci.yml/badge.svg)](https://github.com/erikportilla/deuna-sdk-dotnet/actions/workflows/ci.yml)
+[![Build](https://github.com/yamgooo/deuna-sdk-dotnet/actions/workflows/ci.yml/badge.svg)](https://github.com/yamgooo/deuna-sdk-dotnet/actions/workflows/ci.yml)
 [![NuGet](https://img.shields.io/nuget/v/Deuna.Merchant.Sdk.svg)](https://www.nuget.org/packages/Deuna.Merchant.Sdk)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 

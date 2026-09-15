@@ -63,7 +63,7 @@ public sealed class PaymentClientTests
         var sentBody = JsonDocument.Parse(handler.LastRequestBody!).RootElement;
         sentBody.GetProperty("pointOfSale").GetString().Should().Be("462");
         sentBody.GetProperty("amount").GetDecimal().Should().Be(30m);
-        sentBody.GetProperty("format").GetInt32().Should().Be(1);
+        sentBody.GetProperty("format").GetString().Should().Be("0");
     }
 
     [Fact]
@@ -318,4 +318,50 @@ public sealed class PaymentClientTests
         ex.ToString().Should().NotContain("secret");
         ex.ToString().Should().Contain("401");
     }
+
+    // =========================================================================
+    // Content-Type handling & QrResponseFormat
+    // =========================================================================
+
+    [Fact]
+    public async Task RequestAsync_HtmlResponse_ThrowsDeunaExceptionWithClearMessage()
+    {
+        const string htmlBody = "<!DOCTYPE html><html><head><title>BackOffice DeUna</title></head><body>Portal</body></html>";
+        var (client, _) = PaymentClientFactory.Create(HttpStatusCode.OK, htmlBody, contentType: "text/html");
+
+        var request = new PaymentRequest
+        {
+            PointOfSale = "161",
+            Amount = 10m,
+            InternalTransactionReference = "ref-html",
+            Format = QrResponseFormat.DeeplinkOnly,
+        };
+
+        var act = async () => await client.RequestAsync(request);
+
+        var ex = await act.Should().ThrowAsync<DeunaException>();
+        ex.Which.Message.Should().Contain("unexpected Content-Type 'text/html'");
+        ex.Which.Message.Should().Contain("User-Agent");
+    }
+
+    [Fact]
+    public async Task RequestAsync_FormatAll_SerializesAsString5()
+    {
+        const string body = """{"status":"1","transactionId":"e91c7a59-b67d-40fe-b84b-2a29b055b543","deeplink":"https://pagar.deuna.app/H92p/merchant?id=TEST001"}""";
+        var (client, handler) = PaymentClientFactory.Create(HttpStatusCode.OK, body);
+
+        var request = new PaymentRequest
+        {
+            PointOfSale = "161",
+            Amount = 10m,
+            InternalTransactionReference = "ref-fmt-5",
+            Format = QrResponseFormat.All,
+        };
+
+        await client.RequestAsync(request);
+
+        var sentBody = JsonDocument.Parse(handler.LastRequestBody!).RootElement;
+        sentBody.GetProperty("format").GetString().Should().Be("5");
+    }
 }
+

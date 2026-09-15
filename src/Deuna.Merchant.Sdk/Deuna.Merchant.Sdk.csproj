@@ -9,7 +9,7 @@
     <Version>1.0.0</Version>
     <PackageVersion>1.0.0</PackageVersion>
     <Authors>Erik Portilla</Authors>
-    <RepositoryUrl>https://github.com/erikportilla/deuna-sdk-dotnet</RepositoryUrl>
+    <RepositoryUrl>https://github.com/yamgooo/deuna-sdk-dotnet</RepositoryUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <Description>Strongly-typed, async, DI-friendly .NET SDK for the DEUNA Merchant Payments API. Supports payment requests, payment info queries, cancellations, and refunds with built-in resilience and secure credential handling.</Description>
     <PackageTags>deuna;payments;qr;merchant;sdk;dotnet</PackageTags>

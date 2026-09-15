@@ -19,6 +19,7 @@ namespace Deuna.Merchant.Sdk.Serialization;
 [JsonSerializable(typeof(RefundResponse))]
 [JsonSerializable(typeof(DeunaErrorResponse))]
 [JsonSerializable(typeof(DeunaPaymentWebhookPayload))]
+[JsonSerializable(typeof(Deuna.Merchant.Sdk.Models.Enums.QrResponseFormat))]
 [JsonSourceGenerationOptions(
     PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase,
     WriteIndented = false,

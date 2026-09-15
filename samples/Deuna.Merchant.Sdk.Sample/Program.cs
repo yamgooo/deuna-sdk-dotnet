@@ -14,7 +14,7 @@ using Microsoft.Extensions.Logging;
 // Never hardcode secrets in source code.
 //
 // Required environment variables:
-//   DEUNA_BASE_URL    (default: https://apis-merchant.pdn.deunalab.com)
+//   DEUNA_ENVIRONMENT (optional: Production or Qa; default: Production)
 //   DEUNA_API_KEY     (required)
 //   DEUNA_API_SECRET  (required)
 //   DEUNA_POS_ID      (required — your point-of-sale identifier)
@@ -36,7 +36,7 @@ if (string.IsNullOrWhiteSpace(apiKey) || string.IsNullOrWhiteSpace(apiSecret) ||
 var services = new ServiceCollection();
 
 services.AddLogging(logging =>
-    logging.AddConsole().SetMinimumLevel(LogLevel.Information));
+    logging.AddConsole().SetMinimumLevel(LogLevel.Debug));
 
 services.AddDeunaMerchantClient(opts =>
 {
@@ -77,6 +77,16 @@ catch (DeunaValidationException ex)
 catch (DeunaApiException ex)
 {
     Console.Error.WriteLine($"  ✖ API error {(int)ex.StatusCode}: {ex.Message}");
+    return 3;
+}
+catch (DeunaException ex)
+{
+    Console.Error.WriteLine($"  ✖ SDK error: {ex.Message}");
+    if (ex.InnerException != null)
+    {
+        Console.Error.WriteLine($"    Details: {ex.InnerException.Message}");
+    }
+
     return 3;
 }
 

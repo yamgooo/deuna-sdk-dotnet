@@ -64,6 +64,10 @@ public static class ServiceCollectionExtensions
                 client.Timeout = opts.Timeout;
                 client.DefaultRequestHeaders.Accept.Add(
                     new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+                if (!string.IsNullOrWhiteSpace(opts.UserAgent))
+                {
+                    client.DefaultRequestHeaders.TryAddWithoutValidation("User-Agent", opts.UserAgent);
+                }
             })
             .AddHttpMessageHandler<DeunaAuthHandler>()
             .AddStandardResilienceHandler(opts =>
@@ -142,6 +146,12 @@ public static class ServiceCollectionExtensions
             if (!string.IsNullOrWhiteSpace(maxRetry) && int.TryParse(maxRetry, out var r))
             {
                 opts.MaxRetryAttempts = r;
+            }
+
+            var userAgent = section["UserAgent"];
+            if (!string.IsNullOrWhiteSpace(userAgent))
+            {
+                opts.UserAgent = userAgent;
             }
         });
     }

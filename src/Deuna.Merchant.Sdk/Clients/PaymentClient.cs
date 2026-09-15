@@ -190,6 +190,53 @@ internal sealed class PaymentClient : IPaymentClient
             await ThrowApiExceptionAsync(response, relativeUrl, cancellationToken).ConfigureAwait(false);
         }
 
+        await EnsureJsonResponseAsync(response, relativeUrl, cancellationToken).ConfigureAwait(false);
+
+        var result = await DeserializeResponseAsync(response, relativeUrl, responseTypeInfo, cancellationToken).ConfigureAwait(false);
+
+        _logger.LogInformation("Request to '{Url}' completed successfully.", relativeUrl);
+        return result;
+    }
+
+    /// <summary>
+    /// Validates that the response Content-Type indicates JSON.
+    /// If an HTML or non-JSON body was returned (e.g. by an edge proxy, WAF, or portal routing),
+    /// logs the incident and throws a descriptive <see cref="DeunaException"/>.
+    /// </summary>
+    private async Task EnsureJsonResponseAsync(
+        HttpResponseMessage response,
+        string relativeUrl,
+        CancellationToken cancellationToken)
+    {
+        var mediaType = response.Content.Headers.ContentType?.MediaType;
+        if (mediaType != null && !mediaType.Contains("json", StringComparison.OrdinalIgnoreCase))
+        {
+            var rawBody = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
+            var preview = rawBody.Length > 200 ? rawBody[..200] + "..." : rawBody;
+
+            _logger.LogError(
+                "API endpoint '{Url}' returned unexpected Content-Type '{ContentType}' with status {StatusCode}. Body preview: {Preview}",
+                relativeUrl,
+                mediaType,
+                (int)response.StatusCode,
+                preview);
+
+            throw new DeunaException(
+                $"The DEUNA API returned an unexpected Content-Type '{mediaType}' (status {(int)response.StatusCode}) from '{relativeUrl}'. " +
+                "This usually indicates the request was intercepted or routed to a web portal instead of the API gateway (e.g., missing User-Agent header or incorrect BaseUrl).");
+        }
+    }
+
+    /// <summary>
+    /// Deserializes the JSON response body using the provided source-generated type info.
+    /// </summary>
+    private async Task<TResponse> DeserializeResponseAsync<TResponse>(
+        HttpResponseMessage response,
+        string relativeUrl,
+        System.Text.Json.Serialization.Metadata.JsonTypeInfo<TResponse> responseTypeInfo,
+        CancellationToken cancellationToken)
+        where TResponse : class
+    {
         TResponse? result;
         try
         {
@@ -199,6 +246,13 @@ internal sealed class PaymentClient : IPaymentClient
         }
         catch (JsonException ex)
         {
+            _logger.LogError(
+                ex,
+                "Failed to deserialize response from '{Url}'. StatusCode={StatusCode} ContentType={ContentType}",
+                relativeUrl,
+                (int)response.StatusCode,
+                response.Content.Headers.ContentType?.MediaType);
+
             throw new DeunaException(
                 $"Failed to deserialize the DEUNA API response from '{relativeUrl}'.", ex);
         }
@@ -208,7 +262,6 @@ internal sealed class PaymentClient : IPaymentClient
             throw new DeunaException($"The DEUNA API returned an empty response for '{relativeUrl}'.");
         }
 
-        _logger.LogInformation("Request to '{Url}' completed successfully.", relativeUrl);
         return result;
     }
 
